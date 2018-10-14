@@ -39,9 +39,10 @@ namespace HarvestHttpHeader
           var scanResult = new ScanResult();
           if (client.ResponseHeaders != null)
           {
-            foreach (string header in client.ResponseHeaders.Keys)
+            foreach (string headerKey in client.ResponseHeaders)
             {
-              scanResult.headers.Add(header);
+              string headerValue = client.ResponseHeaders.Get(headerKey);
+              scanResult.headers.Add(headerKey, headerValue);
               scanResult.label = target.label;
             }
             //push the result to the list

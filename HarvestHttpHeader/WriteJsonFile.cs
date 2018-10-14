@@ -18,18 +18,14 @@ namespace HarvestHttpHeader
       this.fileName = fileName;
     }
 
-
     public bool WriteList(List<ScanResult> outputList)
     {
       try
       {
         using (StreamWriter fsw = new StreamWriter(this.fileName))
         {
-          foreach (var item in outputList)
-          {
-            var line = JsonConvert.SerializeObject(item);
-            fsw.WriteLine(outputList);
-          }
+          var serializedList = JsonConvert.SerializeObject(outputList);
+          fsw.WriteLine(serializedList);
         }
       }
       catch (Exception e)

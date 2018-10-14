@@ -17,24 +17,35 @@ namespace HarvestHttpHeader
       var targets = jsonLoader.GetList(targetFile);
 
       var httpHeaderScanner = new HttpHeaderScanner(targets);
-      httpHeaderScanner.Scan(); // should wait async --> perhaps write a dot to the screen ever x milliscenonds
+      var errorFlagScan = httpHeaderScanner.Scan(); // should wait async --> perhaps write a dot to the screen ever x milliscenonds
 
       var results = httpHeaderScanner.GetScanResults();
-      //reader http/https header for the requests
+     
+      DisplayResults(results);
 
-      foreach(var result in results)
+      Console.WriteLine("\nDumping results to file {0} ...", outputFile);
+      var errorFlagWrite = jsonWriter.WriteList(results);
+
+      if (errorFlagScan || errorFlagWrite)
+      {
+        Console.WriteLine("Done. With errors.");
+      } else
+      {
+        Console.WriteLine("Done, without erros.");
+      }
+
+    }
+
+    private static void DisplayResults(List<ScanResult> results)
+    {
+      foreach (var result in results)
       {
         Console.WriteLine(result.label);
-        foreach(var header in result.headers)
+        foreach (var header in result.headers)
         {
           Console.WriteLine("\t" + header);
         }
       }
-
-      Console.WriteLine("\nDumping results to file {0} ...", outputFile);
-      jsonWriter.
-
-
     }
   }
 }
