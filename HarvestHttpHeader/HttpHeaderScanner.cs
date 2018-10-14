@@ -10,7 +10,7 @@ namespace HarvestHttpHeader
   class HttpHeaderScanner
   {
     private List<Target> targets;
-    private List<ScanResult> scanResultList = null;
+    private List<ScanResult> scanResultList = new List<ScanResult>();
     private bool errorFlag;
 
     // constructor
@@ -37,14 +37,16 @@ namespace HarvestHttpHeader
             errorFlag = true;
           }
           var scanResult = new ScanResult();
-          foreach (string header in client.ResponseHeaders.Keys)
+          if (client.ResponseHeaders != null)
           {
-            scanResult.headers.Add(header);
-            scanResult.label = target.label;
+            foreach (string header in client.ResponseHeaders.Keys)
+            {
+              scanResult.headers.Add(header);
+              scanResult.label = target.label;
+            }
+            //push the result to the list
+            scanResultList.Add(scanResult); // --> Could be the same for async
           }
-          //push the result to the list
-          scanResultList.Add(scanResult); // --> Could be the same for async
-
         }
       }
       return errorFlag ? false : true;

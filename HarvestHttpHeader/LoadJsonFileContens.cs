@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -7,15 +8,23 @@ namespace HarvestHttpHeader
 {
   class LoadJsonFileContens
   {
+    private List<Target> targets;
 
-    public List<Target> getList(string targetFile)
+    public List<Target> GetList(string targetFile)
     {
-      using (StreamReader r = new StreamReader(targetFile))
+      try
       {
-        string json = r.ReadToEnd();
-        List<Target> targets = JsonConvert.DeserializeObject<List<Target>>(json);
-        return targets;
+        using (StreamReader r = new StreamReader(targetFile))
+        {
+          string json = r.ReadToEnd();
+          targets = JsonConvert.DeserializeObject<List<Target>>(json);
+        }
+      } catch 
+      {
+        Console.Error.WriteLine("An error occurd while reading the input file.");
       }
+
+      return targets;
     }
   }
 }
